@@ -30,8 +30,12 @@ module.exports = buildSchema(`
   type RootMulation {
     createUser(userInput: UserData): User!
   }
+  type RootQuery {
+    hello: String
+  }
 
   schema {
+    query: RootQuery
     mutation: RootMulation
   }
 `);
