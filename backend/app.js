@@ -4,8 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const {graphqlHTTP} =require('express-graphql');
-const graphqlSchema =require('./graphQL/schema');
+const { graphqlHTTP } = require('express-graphql');
+const graphqlSchema = require('./graphQL/schema');
 const graphqlResolver = require('./graphQL/resolvers');
 
 const app = express();
@@ -45,15 +45,18 @@ app.use((req, res, next) => {
     'OPTIONS, GET, POST, PUT, PATCH, DELETE'
   );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
   next();
 });
 
 app.use('/graphql', graphqlHTTP({
-  schema:graphqlSchema,
+  schema: graphqlSchema,
   rootValue: graphqlResolver,
   graphiql: true,
   formatError(err) {
-    if(!err.originalError){
+    if (!err.originalError) {
       return err;
     }
     const data = err.originalError.data;
@@ -76,7 +79,7 @@ app.use((error, req, res, next) => {
 mongoose.connect(
   'mongodb+srv://Joo1234:Joo1234@cluster1.mydli6e.mongodb.net/shop?retryWrites=true&w=majority'
 ).then(result => {
-    app.listen(8080);
-    
-  })
+  app.listen(8080);
+
+})
   .catch(err => console.log(err));
